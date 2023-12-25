@@ -125,7 +125,7 @@ class Clock {
 
     timeLoop(myTime) {
         this.now = new Date()
-        this.myTime.hour = this.now.getHours() - 1
+        this.myTime.hour = this.now.getHours()
         this.myTime.minute = this.now.getMinutes()
         this.myTime.second = this.now.getSeconds()
 

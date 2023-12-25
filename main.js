@@ -86,15 +86,15 @@ class Clock {
             this.SCREEN_WIDTH = window.innerWidth
             this.SCREEN_HEIGHT = window.innerHeight
 
-            if (this.clockPositions.posX > (this.SCREEN_WIDTH - this.CLOCK_HANDPOS)) {
-                this.clockPositions.posX = this.SCREEN_WIDTH - this.CLOCK_HANDPOS;
-                this.divElement.style.left = this.clockPositions.posX - this.CLOCK_HANDPOS + 'px';
+            const stayInsideTheClock = (posX, element) => {
+                if (posX > (this.SCREEN_WIDTH - this.CLOCK_HANDPOS)) {
+                    posX = this.SCREEN_WIDTH - this.CLOCK_HANDPOS;
+                    element = posX - this.CLOCK_HANDPOS + 'px';
+                }
             }
 
-            if (this.clockPositions.posY > (this.SCREEN_HEIGHT - this.CLOCK_HANDPOS)) {
-                this.clockPositions.posY = this.SCREEN_HEIGHT - this.CLOCK_HANDPOS;
-                this.divElement.style.top = this.clockPositions.posY - this.CLOCK_HANDPOS + 'px';
-            }
+            stayInsideTheClock(this.clockPositions.posX, this.divElement.style.left)
+            stayInsideTheClock(this.clockPositions.posY, this.divElement.style.top)
         });
 
         let clockDiv = document.getElementById('clockDiv');
@@ -125,11 +125,11 @@ class Clock {
 
     timeLoop(myTime) {
         this.now = new Date()
-        this.myTime.hour = this.now.getHours()
+        this.myTime.hour = this.now.getHours() - 1
         this.myTime.minute = this.now.getMinutes()
         this.myTime.second = this.now.getSeconds()
 
-        //console.log('Hour: ' + myTime.hour + ' Minute: ' + myTime.minute + ' Second: ' + myTime.second)
+        // console.log('Hour: ' + myTime.hour + ' Minute: ' + myTime.minute + ' Second: ' + myTime.second)
         
         // CLOCK GRAPH
         this.drawClockBody()
@@ -162,15 +162,9 @@ class Clock {
     calcHour (hour, minute, length, thick, color) {
         
         let angle
-        
-        if (hour == 0 || hour == 12) { angle = 0;
-        } else if (hour == 1  || hour == 13) { angle = 30;  } else if (hour == 2  || hour == 14) { angle = 60;
-        } else if (hour == 3  || hour == 15) { angle = 90;  } else if (hour == 4  || hour == 16) { angle = 120;
-        } else if (hour == 5  || hour == 17) { angle = 150; } else if (hour == 6  || hour == 18) { angle = 180;
-        } else if (hour == 7  || hour == 19) { angle = 210; } else if (hour == 8  || hour == 20) { angle = 240;
-        } else if (hour == 9  || hour == 21) { angle = 270; } else if (hour == 10 || hour == 22) { angle = 300;
-        } else if (hour == 11 || hour == 23) { angle = 330; }
 
+        if (hour || hour + 12) {angle = hour * 30}
+        
         // Add hour minutes deg
         angle = angle + (minute * 0.5);
         
